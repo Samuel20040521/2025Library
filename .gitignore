@@ -1,0 +1,19 @@
+# 編譯輸出文件
+/build/
+*.o
+*.out
+*.exe
+
+# 編譯器生成文件
+*.log
+*.tmp
+
+# IDE 文件
+.vscode/
+.idea/
+
+# CMake 文件
+CMakeFiles/
+CMakeCache.txt
+Makefile
+cmake_install.cmake
