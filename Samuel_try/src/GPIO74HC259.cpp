@@ -30,7 +30,7 @@ void GPIO74HC259::initialize() {
     setValue(a2_pin, 0);
     setValue(d_pin, 0);
     setValue(le_pin, 1); // 預設高電平
-    setValue(mr_pin, 1); // 預設高電平
+    setValue(mr_pin, 0); // 預設低電平
   } catch (const std::exception &e) {
     throw std::runtime_error("初始化 GPIO 失敗: " + std::string(e.what()));
   }
