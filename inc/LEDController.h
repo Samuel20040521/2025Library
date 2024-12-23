@@ -54,13 +54,16 @@ public:
     int num_channel;
 
 private:
-  void gpioInit();
-  void close_gpio();
-  void setValue(int pin, int value);
-  void select_channel(int channel);
-  int play(const std::vector<std::vector<int>> &statusLists);
-  int A0, A1, A2;
-  ws2811_t ledString[8] = {
+    void gpioInit();
+    void close_gpio();
+    void setValue(int pin, int value);
+    void select_channel(int channel);
+    int play(const std::vector<std::vector<int>> &statusLists);
+    int A0, A1, A2;
+    static const int LATCH_LED_STRIP_NUM = 8;
+    ws2811_t ledString[LATCH_LED_STRIP_NUM];
+  /*
+   = {
       {
           .freq = TARGET_FREQ,
           .dmanum = DMA,
@@ -189,6 +192,6 @@ private:
         },
 
     };
-    */
+  */
 };
 #endif

@@ -45,47 +45,46 @@ uint32_t LEDColor::getRGB() { return rgb; }
 LEDController::LEDController() { num_channel = 0; }
 int LEDController::init(const std::vector<int> &numLedsEachStrip) {
 	close_gpio();
-
 	// initialize WS2812B
 	ws2811_return_t return_WS2811;
 	num_channel = numLedsEachStrip.size(); // num_channel: number of led strips
 	// initialize variables for jgarff's ws281x library
-  	for (int i = 0; i < 8; i++) { 
+	for (int i = 0; i < LATCH_LED_STRIP_NUM; i++) { 
 		ledString[i].freq = TARGET_FREQ;
 		ledString[i].dmanum = DMA;
 		ledString[i].channel[0].gpionum = GPIO_PIN;
 		ledString[i].channel[0].invert = 0;
-		ledString[i].channel[0].count = Config::WS2812_NUM_LED_EACH_STRIP[i];
+		ledString[i].channel[0].count = Config::WS2812_NUM_LED_EACH_STRIP[i]; 
+		// Didn't see the necessity initializing led count here
 		ledString[i].channel[0].strip_type = STRIP_TYPE;
 		ledString[i].channel[0].brightness = 255;
-  	}
+	}
 	for (int i = 0; i < num_channel; i++) {
-		
 		ledString[i].channel[0].count = numLedsEachStrip[i]; // setup led number for each strip
-
 		if ((return_WS2811 = ws2811_init(&ledString[i])) != WS2811_SUCCESS) {
-		fprintf(stderr, "ws2811_init %d failed: %s\n", i,
+			fprintf(stderr, "ws2811_init %d failed: %s\n", i, 
+					ws2811_get_return_t_str(return_WS2811));
+			return return_WS2811;
+		}
+	}
+
+	// initialize GPIO_PIN
+	gpioInit();
+	for (int i = 0; i < num_channel; i++) {
+		// let all LEDs off
+		select_channel(i);
+		for (int j = 0; j < ledString[i].channel[0].count; j++) {
+			ledString[i].channel[0].leds[j] = 0;
+		}
+		// render
+		if ((return_WS2811 = ws2811_render(&ledString[i])) != WS2811_SUCCESS) {
+		fprintf(stderr, "ws2811_render %d failed: %s\n", i,
 				ws2811_get_return_t_str(return_WS2811));
 		return return_WS2811;
 		}
+		usleep(ledString[i].channel[0].count * 30);
 	}
-  // initialize GPIO_PIN
-  gpioInit();
-  for (int i = 0; i < num_channel; i++) {
-    // let all LEDs off
-    select_channel(i);
-    for (int j = 0; j < ledString[i].channel[0].count; j++) {
-      ledString[i].channel[0].leds[j] = 0;
-    }
-    // render
-    if ((return_WS2811 = ws2811_render(&ledString[i])) != WS2811_SUCCESS) {
-      fprintf(stderr, "ws2811_render %d failed: %s\n", i,
-              ws2811_get_return_t_str(return_WS2811));
-      return return_WS2811;
-    }
-    usleep(ledString[i].channel[0].count * 30);
-  }
-  return WS2811_SUCCESS;
+	return WS2811_SUCCESS;
 }
 int LEDController::sendAll(const std::vector<std::vector<int>> &statusLists) {
   // Check if data size is consistent with stored during initialization
@@ -213,12 +212,12 @@ void LEDController::gpioInit() {
 }
 
 void LEDController::select_channel(int address) {
-  if (address > 7 || address < 0) {
-    throw std::invalid_argument("地址超出範圍: 必須在 0 到 7 之間");
-  }
-  setValue(A0, address & 0x01);
-  setValue(A1, (address >> 1) & 0x01);
-  setValue(A2, (address >> 2) & 0x01);
+	if (address > 7 || address < 0) {
+		throw std::invalid_argument("Address out of range: must be in between 0 to 7");
+	}
+	setValue(A0, address & 0x01);
+	setValue(A1, (address >> 1) & 0x01);
+	setValue(A2, (address >> 2) & 0x01);
 }
 
 void LEDController::setValue(int pin, int value) {
