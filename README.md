@@ -1,4 +1,15 @@
-# 2025Library
-NTUEE LightDance PCA9955 Library 
+# Build code
 
-張學恩 git test 
+1. Make build folder
+
+```bash
+mkdir build
+cd build
+```
+
+2. Build file
+
+```bash
+cmake ../
+cmake --build .
+```
