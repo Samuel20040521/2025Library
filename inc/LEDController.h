@@ -34,34 +34,37 @@
 
 class LEDColor {
 public:
-    LEDColor();
-    void setColor(const int &colorCode);
-    uint32_t getRGB();
+  LEDColor();
+  void setColor(const int &colorCode);
+  uint32_t getRGB();
 
 private:
-    int r;
-    int g;
-    int b;
-    uint32_t rgb;
+  int r;
+  int g;
+  int b;
+  uint32_t rgb;
 };
 
 class LEDController {
 public:
-    LEDController();
-    int init(const std::vector<int> &shape);
-    int sendAll(const std::vector<std::vector<int>> &statusLists);
-    void finish();
-    int num_channel;
+  LEDController();
+  int init(const std::vector<int> &shape);
+  int sendAll(const std::vector<std::vector<int>> &statusLists);
+  void finish();
+  int num_channel;
 
 private:
-    void gpioInit();
-    void close_gpio();
-    void setValue(int pin, int value);
-    void select_channel(int channel);
-    int play(const std::vector<std::vector<int>> &statusLists);
-    int A0, A1, A2;
-    static const int LATCH_LED_STRIP_NUM = 8;
-    ws2811_t ledString[LATCH_LED_STRIP_NUM];
+  void gpioInit();
+  void exportGPIO(int pin);
+  void close_gpio();
+  void setDirection(int pin, const std::string &direction);
+  int openGPIOValueFile(int pin);
+  void setValue(int pin, int value);
+  void select_channel(int channel);
+  int play(const std::vector<std::vector<int>> &statusLists);
+  int A0, A1, A2;
+  static const int LATCH_LED_STRIP_NUM = 8;
+  ws2811_t ledString[LATCH_LED_STRIP_NUM];
   /*
    = {
       {
