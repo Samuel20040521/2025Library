@@ -27,6 +27,11 @@ namespace Config
     inline constexpr float GAMMA_LED_R = 1.75;
     inline constexpr float GAMMA_LED_G = 2.3;
     inline constexpr float GAMMA_LED_B = 2.5;
+
+    //PCA9955 register initalization: Brightest current output for all pin
+    inline constexpr unsigned char IREFALL_MAX[] = {0x45, 0xff}; //10000101(Register 45h), 11111111(Current)
+    //PCA9955 register initalization: For auto-increment of register address when input LED data
+    inline constexpr unsigned char PWM_AUTO_INCREMENT = 0x88; //10001000(the first 1 for Auto-increment, the second 1 as Register 08h for PWM0 register)
 }
 
 #endif // CONFIG_
