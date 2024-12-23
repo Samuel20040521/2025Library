@@ -167,7 +167,7 @@ int LEDController::openGPIOValueFile(int pin) {
   return fd;
 }
 
-void LEDController::select_channel(int address) {
+/*void LEDController::select_channel(int address) {
   if (address > 7 || address < 0) {
     throw std::invalid_argument(
         "Address out of range: must be in between 0 to 7");
@@ -175,6 +175,123 @@ void LEDController::select_channel(int address) {
   setValue(A0, address & 0x01);
   setValue(A1, (address >> 1) & 0x01);
   setValue(A2, (address >> 2) & 0x01);
+} */
+
+void LEDController::select_channel(int address) {
+switch (address) {
+        case 0:
+            if (write(A0, "0", 1) != 1) {
+                perror("Error writing to /sys/class/gpio/gpio23/value");
+                exit(1);
+            }
+            if (write(A1, "0", 1) != 1) {
+                perror("Error writing to /sys/class/gpio/gpio24/value");
+                exit(1);
+            }
+            if (write(A2, "0", 1) != 1) {
+                perror("Error writing to /sys/class/gpio/gpio25/value");
+                exit(1);
+            }
+            break;
+        case 1:
+            if (write(A0, "1", 1) != 1) {
+                perror("Error writing to /sys/class/gpio/gpio23/value");
+                exit(1);
+            }
+            if (write(A1, "0", 1) != 1) {
+                perror("Error writing to /sys/class/gpio/gpio24/value");
+                exit(1);
+            }
+            if (write(A2, "0", 1) != 1) {
+                perror("Error writing to /sys/class/gpio/gpio25/value");
+                exit(1);
+            };
+            break;
+        case 2:
+            if (write(A0, "0", 1) != 1) {
+                perror("Error writing to /sys/class/gpio/gpio23/value");
+                exit(1);
+            }
+            if (write(A1, "1", 1) != 1) {
+                perror("Error writing to /sys/class/gpio/gpio24/value");
+                exit(1);
+            }
+            if (write(A2, "0", 1) != 1) {
+                perror("Error writing to /sys/class/gpio/gpio25/value");
+                exit(1);
+            }
+            break;
+        case 3:
+            if (write(A0, "1", 1) != 1) {
+                perror("Error writing to /sys/class/gpio/gpio23/value");
+                exit(1);
+            }
+            if (write(A1, "1", 1) != 1) {
+                perror("Error writing to /sys/class/gpio/gpio24/value");
+                exit(1);
+            }
+            if (write(A2, "0", 1) != 1) {
+                perror("Error writing to /sys/class/gpio/gpio25/value");
+                exit(1);
+            }
+            break;
+        case 4:
+            if (write(A0, "0", 1) != 1) {
+                perror("Error writing to /sys/class/gpio/gpio23/value");
+                exit(1);
+            }
+            if (write(A1, "0", 1) != 1) {
+                perror("Error writing to /sys/class/gpio/gpio24/value");
+                exit(1);
+            }
+            if (write(A2, "1", 1) != 1) {
+                perror("Error writing to /sys/class/gpio/gpio25/value");
+                exit(1);
+            };
+            break;
+        case 5:
+            if (write(A0, "1", 1) != 1) {
+                perror("Error writing to /sys/class/gpio/gpio23/value");
+                exit(1);
+            }
+            if (write(A1, "0", 1) != 1) {
+                perror("Error writing to /sys/class/gpio/gpio24/value");
+                exit(1);
+            }
+            if (write(A2, "1", 1) != 1) {
+                perror("Error writing to /sys/class/gpio/gpio25/value");
+                exit(1);
+            };
+            break;
+        case 6:
+            if (write(A0, "0", 1) != 1) {
+                perror("Error writing to /sys/class/gpio/gpio23/value");
+                exit(1);
+            }
+            if (write(A1, "1", 1) != 1) {
+                perror("Error writing to /sys/class/gpio/gpio24/value");
+                exit(1);
+            }
+            if (write(A2, "1", 1) != 1) {
+                perror("Error writing to /sys/class/gpio/gpio25/value");
+                exit(1);
+            }
+            break;
+        case 7:
+            if (write(A0, "1", 1) != 1) {
+                perror("Error writing to /sys/class/gpio/gpio23/value");
+                exit(1);
+            }
+            if (write(A1, "1", 1) != 1) {
+                perror("Error writing to /sys/class/gpio/gpio24/value");
+                exit(1);
+            }
+            if (write(A2, "1", 1) != 1) {
+                perror("Error writing to /sys/class/gpio/gpio25/value");
+                exit(1);
+            }
+            break;
+    }
 }
 
 void LEDController::setValue(int pin, int value) {
@@ -182,7 +299,7 @@ void LEDController::setValue(int pin, int value) {
                           "/value");
   if (!valueFile.is_open()) {
     throw std::runtime_error("Can't set GPIO pin" + std::to_string(pin) +
-                             "'s value");
+                              "'s value");
   }
   valueFile << value;
   valueFile.close();
