@@ -1,6 +1,6 @@
 // compile: g++ -o OFController.o -I./include -c OFController.cpp
 // For Optical Fiber Control By I2C
-#include "OFController.h"
+#include "../inc/OFController.h"
 
 OFColor::OFColor() : r(0), g(0), b(0) {} 
 
