@@ -117,16 +117,9 @@ void LEDController::gpioInit() {
     }
 
     // 初始化 GPIO 值文件
-<<<<<<< HEAD
-    A0 = openGPIOValueFile(23);
-    A1 = openGPIOValueFile(24);
-    A2 = openGPIOValueFile(25);
-	
-=======
     A0_FD = openGPIOValueFile(23);
     A1_FD = openGPIOValueFile(24);
     A2_FD = openGPIOValueFile(25);
->>>>>>> 6ddfdd3c55a77c5969eeae68d7d73f52d220e678
   } catch (const std::exception &e) {
     throw std::runtime_error("GPIO 初始化失敗: " + std::string(e.what()));
   }
@@ -163,11 +156,7 @@ int LEDController::openGPIOValueFile(int pin) {
   return fd;
 }
 
-<<<<<<< HEAD
-/* void LEDController::select_channel(int address) {
-=======
 void LEDController::select_channel(int address) {
->>>>>>> 6ddfdd3c55a77c5969eeae68d7d73f52d220e678
   if (address > 7 || address < 0) {
     throw std::invalid_argument(
         "Address out of range: must be in between 0 to 7");
