@@ -48,17 +48,6 @@ int LEDController::init(const std::vector<int> &numLedsEachStrip) {
   // initialize WS2812B
   ws2811_return_t return_WS2811;
   num_channel = numLedsEachStrip.size(); // num_channel: number of led strips
-  // initialize variables for jgarff's ws281x library
-  for (int i = 0; i < LATCH_LED_STRIP_NUM; i++) {
-    ledString[i].freq = TARGET_FREQ;
-    ledString[i].dmanum = DMA;
-    ledString[i].channel[0].gpionum = GPIO_PIN;
-    ledString[i].channel[0].invert = 0;
-    ledString[i].channel[0].count = Config::WS2812_NUM_LED_EACH_STRIP[i];
-    // Didn't see the necessity initializing led count here
-    ledString[i].channel[0].strip_type = STRIP_TYPE;
-    ledString[i].channel[0].brightness = 255;
-  }
   for (int i = 0; i < num_channel; i++) {
     ledString[i].channel[0].count =
         numLedsEachStrip[i]; // setup led number for each strip
@@ -131,6 +120,7 @@ void LEDController::gpioInit() {
     A0 = openGPIOValueFile(23);
     A1 = openGPIOValueFile(24);
     A2 = openGPIOValueFile(25);
+	
   } catch (const std::exception &e) {
     throw std::runtime_error("GPIO 初始化失敗: " + std::string(e.what()));
   }
@@ -164,10 +154,10 @@ int LEDController::openGPIOValueFile(int pin) {
     throw std::runtime_error("無法打開 GPIO " + std::to_string(pin) +
                              " 的值文件");
   }
-  return pin;
+  return fd;
 }
 
-/*void LEDController::select_channel(int address) {
+/* void LEDController::select_channel(int address) {
   if (address > 7 || address < 0) {
     throw std::invalid_argument(
         "Address out of range: must be in between 0 to 7");
