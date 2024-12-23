@@ -88,12 +88,12 @@ int LEDController::init(const std::vector<int> &numLedsEachStrip) {
 }
 int LEDController::sendAll(const std::vector<std::vector<int>> &statusLists) {
   // Check if data size is consistent with stored during initialization
-  for (int i = 0; i < num_channel; i++) {
-    if (int(statusLists[i].size()) > int(ledString[i].channel[0].count)) {
-      //            fprintf(stderr, "Error: Strip %d is longer then init
-      //            settings: %d\n", (int)statusLists[i].size(),
-      //            ledString[i].channel[0].count);
-      return -1;
+  	for (int i = 0; i < num_channel; i++) {
+    	if (int(statusLists[i].size()) > int(ledString[i].channel[0].count)) {
+		//            fprintf(stderr, "Error: Strip %d is longer then init
+		//            settings: %d\n", (int)statusLists[i].size(),
+		//            ledString[i].channel[0].count);
+		return -1;
     }
   }
   // Push data to LED strips
@@ -243,8 +243,8 @@ void LEDController::close_gpio() {
   	}
 
   	if (write(fd, "23", 2) != 2) {
-    fprintf(stderr, "Error writing to /sys/class/gpio/unexport: 23\n");
-  }
+    	fprintf(stderr, "Error writing to /sys/class/gpio/unexport: 23\n");
+  	}
 
   if (write(fd, "24", 2) != 2) {
     fprintf(stderr, "Error writing to /sys/class/gpio/unexport: 24\n");
@@ -253,8 +253,4 @@ void LEDController::close_gpio() {
   if (write(fd, "25", 2) != 2) {
     fprintf(stderr, "Error writing to /sys/class/gpio/unexport: 25\n");
   }
-}
-
-int main () {
-	return 0;
 }
