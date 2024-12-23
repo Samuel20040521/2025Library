@@ -128,9 +128,9 @@ void LEDController::gpioInit() {
     }
 
     // 初始化 GPIO 值文件
-    A0 = openGPIOValueFile(23);
-    A1 = openGPIOValueFile(24);
-    A2 = openGPIOValueFile(25);
+    A0_FD = openGPIOValueFile(23);
+    A1_FD = openGPIOValueFile(24);
+    A2_FD = openGPIOValueFile(25);
   } catch (const std::exception &e) {
     throw std::runtime_error("GPIO 初始化失敗: " + std::string(e.what()));
   }
@@ -167,16 +167,16 @@ int LEDController::openGPIOValueFile(int pin) {
   return pin;
 }
 
-/*void LEDController::select_channel(int address) {
+void LEDController::select_channel(int address) {
   if (address > 7 || address < 0) {
     throw std::invalid_argument(
         "Address out of range: must be in between 0 to 7");
   }
-  setValue(A0, address & 0x01);
-  setValue(A1, (address >> 1) & 0x01);
-  setValue(A2, (address >> 2) & 0x01);
-} */
-
+  setValue(A0_PIN, address & 0x01);
+  setValue(A1_PIN, (address >> 1) & 0x01);
+  setValue(A2_PIN, (address >> 2) & 0x01);
+}
+/*
 void LEDController::select_channel(int address) {
 switch (address) {
         case 0:
@@ -293,13 +293,14 @@ switch (address) {
             break;
     }
 }
+*/
 
 void LEDController::setValue(int pin, int value) {
   std::ofstream valueFile(GPIO_BASE_PATH + "gpio" + std::to_string(pin) +
                           "/value");
   if (!valueFile.is_open()) {
     throw std::runtime_error("Can't set GPIO pin" + std::to_string(pin) +
-                              "'s value");
+                             "'s value");
   }
   valueFile << value;
   valueFile.close();
@@ -309,9 +310,9 @@ void LEDController::finish() {
   for (int i = 0; i < num_channel; i++)
     ws2811_fini(&ledString[i]);
   printf("LED GPIO finished.\n");
-  close(A0);
-  close(A1);
-  close(A2);
+  close(A0_FD);
+  close(A1_FD);
+  close(A2_FD);
 }
 void LEDController::close_gpio() {
   int fd = open("/sys/class/gpio/unexport", O_WRONLY);
