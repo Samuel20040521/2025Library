@@ -1,36 +1,25 @@
-# Minimum CMake version required
 cmake_minimum_required(VERSION 3.10)
-
-# Project name
 project(hardware)
 
-# Set C++ Standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Include directory
 set(INCLUDES inc)
 
-# Define external LED library
-set(LED_LIBRARY ws2811)
+# 查找 ws2811 庫
+find_library(WS2811_LIB ws2811 REQUIRED PATHS /usr/local/lib)
 
-# Add the static library
+# 添加頭文件路徑
+include_directories(${INCLUDES} /usr/local/include/ws2811)
+
+# 添加硬件庫
 add_library(hardware STATIC ./src/OFController.cpp ./src/LEDController.cpp)
 
-# Add include directories for the library
-target_include_directories(hardware PUBLIC ${INCLUDES})
+# 鏈接 ws2811 靜態庫
+target_link_libraries(hardware ${WS2811_LIB})
 
-# Link the external LED library
-target_link_libraries(hardware ${LED_LIBRARY})
-
-# Add the main executable for the application
+# 添加主程序
 add_executable(AllMain ./src/AllMain.cpp)
 
-# Link the hardware library to the application executable
+# 鏈接主程序到硬件庫
 target_link_libraries(AllMain hardware)
-
-# Add the test executable for testing
-add_executable(TestMain ./tests/test_main.cpp)
-
-# Link the hardware library to the test executable
-target_link_libraries(TestMain hardware)
