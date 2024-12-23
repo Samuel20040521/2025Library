@@ -15,7 +15,7 @@
 # CMake 文件
 CMakeFiles/
 CMakeCache.txt
-Makefile
+# Makefile
 cmake_install.cmake
 
 # Tree plugin
