@@ -164,7 +164,7 @@ int LEDController::openGPIOValueFile(int pin) {
     throw std::runtime_error("無法打開 GPIO " + std::to_string(pin) +
                              " 的值文件");
   }
-  return fd;
+  return pin;
 }
 
 /*void LEDController::select_channel(int address) {
