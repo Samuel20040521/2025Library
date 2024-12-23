@@ -119,97 +119,6 @@ int LEDController::play(const std::vector<std::vector<int>> &statusLists) {
   }
   return 0;
 }
-// void LEDController::gpioInit() {
-//   int fd_export = open("/sys/class/gpio/export", O_WRONLY);
-//
-//   if (fd_export == -1) {
-//     perror("Unable to open /sys/class/gpio/export");
-//     exit(1);
-//   }
-//
-//   if (write(fd_export, "23", 2) != 2) {
-//     perror("Error writing to /sys/class/gpio/export");
-//     exit(1);
-//   }
-//
-//   if (write(fd_export, "24", 2) != 2) {
-//     perror("Error writing to /sys/class/gpio/export");
-//     exit(1);
-//   }
-//
-//   if (write(fd_export, "25", 2) != 2) {
-//     perror("Error writing to /sys/class/gpio/export");
-//     exit(1);
-//   }
-//
-//   close(fd_export);
-//
-//   // Set the pin to be an output by writing "out" to
-//   // /sys/class/gpio/gpio24/direction
-//
-//   int fd = open("/sys/class/gpio/gpio23/direction", O_WRONLY);
-//   if (fd == -1) {
-//     perror("Unable to open /sys/class/gpio/gpio23/direction");
-//     exit(1);
-//   }
-//
-//   if (write(fd, "out", 3) != 3) {
-//     perror("Error writing to /sys/class/gpio/gpio23/direction");
-//     exit(1);
-//   }
-//
-//   close(fd);
-//
-//   // Set the pin to be an output by writing "out" to
-//   // /sys/class/gpio/gpio24/direction
-//
-//   fd = open("/sys/class/gpio/gpio24/direction", O_WRONLY);
-//   if (fd == -1) {
-//     perror("Unable to open /sys/class/gpio/gpio24/direction");
-//     exit(1);
-//   }
-//
-//   if (write(fd, "out", 3) != 3) {
-//     perror("Error writing to /sys/class/gpio/gpio24/direction");
-//     exit(1);
-//   }
-//
-//   close(fd);
-//
-//   // Set the pin to be an output by writing "out" to
-//   // /sys/class/gpio/gpio24/direction
-//
-//   fd = open("/sys/class/gpio/gpio25/direction", O_WRONLY);
-//   if (fd == -1) {
-//     perror("Unable to open /sys/class/gpio/gpio25/direction");
-//     exit(1);
-//   }
-//
-//   if (write(fd, "out", 3) != 3) {
-//     perror("Error writing to /sys/class/gpio/gpio25/direction");
-//     exit(1);
-//   }
-//
-//   close(fd);
-//
-//   A0 = open("/sys/class/gpio/gpio23/value", O_WRONLY);
-//   if (fd == -1) {
-//     perror("Unable to open /sys/class/gpio/gpio23/value");
-//     exit(1);
-//   }
-//
-//   A1 = open("/sys/class/gpio/gpio24/value", O_WRONLY);
-//   if (fd == -1) {
-//     perror("Unable to open /sys/class/gpio/gpio24/value");
-//     exit(1);
-//   }
-//
-//   A2 = open("/sys/class/gpio/gpio25/value", O_WRONLY);
-//   if (fd == -1) {
-//     perror("Unable to open /sys/class/gpio/gpio25/value");
-//     exit(1);
-//   }
-// }
 
 void LEDController::gpioInit() {
   try {
@@ -226,6 +135,7 @@ void LEDController::gpioInit() {
     throw std::runtime_error("GPIO 初始化失敗: " + std::string(e.what()));
   }
 }
+
 void LEDController::setDirection(int pin, const std::string &direction) {
   std::ofstream directionFile(GPIO_BASE_PATH + "gpio" + std::to_string(pin) +
                               "/direction");
