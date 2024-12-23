@@ -1,17 +1,18 @@
 // compile: g++ -o OFController.o -I./include -c OFController.cpp
-#include "../inc/OFController.h"
+// For Optical Fiber Control By I2C
+#include "OFController.h"
 
-OFColor::OFColor() : r(0), g(0), b(0) {}
+OFColor::OFColor() : r(0), g(0), b(0) {} 
 
-void OFColor::setColor(const int &colorCode)
+void OFColor::setColor(const int &colorCode) 
 {
     const int R = (colorCode >> 24) & 0xff;
-    const int G = (colorCode >> 16) & 0xff;
+    const int G = (colorCode >> 16) & 0xff; 
     const int B = (colorCode >> 8) & 0xff;
     const int A = (colorCode >> 0) & 0xff;
 
     float r_cal = 0.0, g_cal = 0.0, b_cal = 0.0;
-    if ((R + G + B) > 0)
+    if ((R + G + B) > 0) 
     {
         float a = A / Config::OF_BRIGHTNESS_LEVEL * Config::OF_MAX_BRIGHTNESS_SCALING_FACTOR;
 
@@ -48,16 +49,16 @@ int OFController::init()
     printf("I2C Hardware Initialzed\n");
 
     // open I2C bus
-    for (int i = 0; i < Config::NUMPCA; i++)
+    for (int i = 0; i < Config::NUMPCA; i++) //the i-th PCA9955 / 0~7(NUMPCA) in total
     {
         err_flag[i] = true;
-        if ((fd[i] = I2CInit()) < 0)
+        if ((fd[i] = I2CInit()) < 0) 
         {
             fprintf(stderr, "I2C of %d init fail.\n", i);
             return 1;
         }
 
-        if (ioctl(fd[i], I2C_SLAVE, Config::PCAAddr[i]) < 0)
+        if (ioctl(fd[i], I2C_SLAVE, Config::PCAAddr[i]) < 0) //no need to mention slave address everytime afterward (PCA9955 Datasheet P.40)
         {
             fprintf(stderr, "Failed to acquire bus access and/or talk to slave %d", i);
             return 2;
@@ -69,19 +70,22 @@ int OFController::init()
 int OFController::sendAll(const vector<int> &statusLists)
 {    
     unsigned char buffer[16];
-    buffer[0] = 0x88; // Auto increment PWMx
+    buffer[0] = Config::PWM_AUTO_INCREMENT; //no need to mention PWM register address everytime before LED data (PCA9955 Datasheet P.14)
     int counter;
     OFColor Status;
     for (int i = 0; i < Config::NUMPCA; i++)
     {
-    	I2C_Specified_Init(i);
         counter = 0;
-        
-        if (err_flag[i] == false)
+        I2C_Specified_Init(i);
+        if (err_flag[i]) //if init fail, redo
+        {
+            I2C_Specified_Init(i);
+        }
+        if (!err_flag[i])
         {
             for (int j = 0; j < 5; j++)
             {
-                Status.setColor(statusLists[i*5+j]); // remember to get every not just the first 5
+                Status.setColor(statusLists[i*5+j]); // remember to get every not just the first 5 (5 LED each PCA9955)
                 // fprintf(stderr, "r: %d, g: %d, b:%d\n", Status.getR(), Status.getG(), Status.getB());
                 buffer[counter * 3 + 1] = Status.getR();
                 buffer[counter * 3 + 2] = Status.getG();
@@ -92,25 +96,6 @@ int OFController::sendAll(const vector<int> &statusLists)
             {
                 // fprintf(stderr, "Failed to write to the I2C bus %x.\n", Config::PCAAddr[i]);
                 err_flag[i] = true;
-            }
-        }
-        else
-        {
-            I2C_Specified_Init(i);
-            if (!err_flag[i])
-            {
-                for (int j = i * 5; j < 5 * (i + 1); j++)
-                {
-                    Status.setColor(statusLists[j]);
-                    buffer[counter * 3 + 1] = Status.getR();
-                    buffer[counter * 3 + 2] = Status.getG();
-                    buffer[counter * 3 + 3] = Status.getB();
-                    counter++;
-                }
-                if (write(fd[i], buffer, 16) != 16)
-                {
-                    err_flag[i] = true;
-                }
             }
         }
     }
@@ -135,14 +120,11 @@ void OFController::I2C_Specified_Init(int i)
     {
 //        fprintf(stderr, "Failed to acquire bus access and/or talk to slave %d", i);
     }
-    unsigned char buffer[2];
-    buffer[0] = 0x45;
-    buffer[1] = 0xFF;
-    if (write(fd[i], buffer, 2) != 2)
+    if (write(fd[i], Config::IREFALL_MAX, 2) != 2) //the 2 followed is the byte send
     {
 //        fprintf(stderr, "failed to reconnect to I2C bus %x.\n", Config::PCAAddr[i]);
     }
-    else
+    else //if no error
     {
         err_flag[i] = false;
     }
