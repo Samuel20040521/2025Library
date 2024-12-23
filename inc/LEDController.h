@@ -56,6 +56,7 @@ public:
 private:
   void gpioInit();
   void close_gpio();
+  void setValue(int pin, int value);
   void select_channel(int channel);
   int play(const std::vector<std::vector<int>> &statusLists);
   int A0, A1, A2;
