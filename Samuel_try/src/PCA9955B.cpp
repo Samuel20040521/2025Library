@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <sys/ioctl.h>
 #include <unistd.h>
+// TODO : try catch throw err handing
 
 PCA9955B::PCA9955B(const std::string &i2cPath, int address)
     : i2cPath(i2cPath), address(address), i2cFileDescriptor(-1) {}

@@ -38,20 +38,32 @@ uint32_t LEDColor::getRGB() { return rgb; }
 
 // LEDController
 LEDController::LEDController() { num_channel = 0; }
-int LEDController::init(const std::vector<int> &shape) {
-  close_gpio();
+int LEDController::init(const std::vector<int> &numLedsEachStrip) {
+	close_gpio();
 
-  // initialize WS2812B
-  ws2811_return_t ret;
-  num_channel = shape.size();
-  for (int i = 0; i < num_channel; i++) {
-    ledString[i].channel[0].count = shape[i];
-    if ((ret = ws2811_init(&ledString[i])) != WS2811_SUCCESS) {
-      fprintf(stderr, "ws2811_init %d failed: %s\n", i,
-              ws2811_get_return_t_str(ret));
-      return ret;
-    }
-  }
+	// initialize WS2812B
+	ws2811_return_t return_WS2811;
+	num_channel = numLedsEachStrip.size(); // num_channel: number of led strips
+	// initialize variables for jgarff's ws281x library
+  	for (int i = 0; i < 8; i++) { 
+		ledString[i].freq = TARGET_FREQ;
+		ledString[i].dmanum = DMA;
+		ledString[i].channel[0].gpionum = GPIO_PIN;
+		ledString[i].channel[0].invert = 0;
+		ledString[i].channel[0].count = Config::WS2812_NUM_LED_EACH_STRIP[i];
+		ledString[i].channel[0].strip_type = STRIP_TYPE;
+		ledString[i].channel[0].brightness = 255;
+  	}
+	for (int i = 0; i < num_channel; i++) {
+		
+		ledString[i].channel[0].count = numLedsEachStrip[i]; // setup led number for each strip
+
+		if ((return_WS2811 = ws2811_init(&ledString[i])) != WS2811_SUCCESS) {
+		fprintf(stderr, "ws2811_init %d failed: %s\n", i,
+				ws2811_get_return_t_str(return_WS2811));
+		return return_WS2811;
+		}
+	}
   // initialize GPIO_PIN
   gpioInit();
   for (int i = 0; i < num_channel; i++) {
@@ -61,10 +73,10 @@ int LEDController::init(const std::vector<int> &shape) {
       ledString[i].channel[0].leds[j] = 0;
     }
     // render
-    if ((ret = ws2811_render(&ledString[i])) != WS2811_SUCCESS) {
+    if ((return_WS2811 = ws2811_render(&ledString[i])) != WS2811_SUCCESS) {
       fprintf(stderr, "ws2811_render %d failed: %s\n", i,
-              ws2811_get_return_t_str(ret));
-      return ret;
+              ws2811_get_return_t_str(return_WS2811));
+      return return_WS2811;
     }
     usleep(ledString[i].channel[0].count * 30);
   }
@@ -336,4 +348,8 @@ void LEDController::close_gpio() {
   if (write(fd, "25", 2) != 2) {
     fprintf(stderr, "Error writing to /sys/class/gpio/unexport: 25\n");
   }
+}
+
+int main () {
+	return 0;
 }
