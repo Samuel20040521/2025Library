@@ -54,29 +54,28 @@ public:
     int num_channel;
 
 private:
-    void gpioInit();
-    void close_gpio();
-    void select_channel(int channel);
-    int play(const std::vector<std::vector<int>> &statusLists);
-    int A0, A1, A2;
-    ws2811_t ledString[8];
-    /*
-     = {
-        {
-            .freq = TARGET_FREQ,
-            .dmanum = DMA,
-            .channel =
-                {
-                    [0] =
-                        {
-                            .gpionum = GPIO_PIN,
-                            .invert = 0,
-                            .count = Config::WS2812_NUM_LED[0],
-                            .strip_type = STRIP_TYPE,
-                            .brightness = 255,
-                        },
-                },
-        },
+  void gpioInit();
+  void close_gpio();
+  void setValue(int pin, int value);
+  void select_channel(int channel);
+  int play(const std::vector<std::vector<int>> &statusLists);
+  int A0, A1, A2;
+  ws2811_t ledString[8] = {
+      {
+          .freq = TARGET_FREQ,
+          .dmanum = DMA,
+          .channel =
+              {
+                  [0] =
+                      {
+                          .gpionum = GPIO_PIN,
+                          .invert = 0,
+                          .count = Config::WS2812_NUM_LED[0],
+                          .strip_type = STRIP_TYPE,
+                          .brightness = 255,
+                      },
+              },
+      },
 
         {
             .freq = TARGET_FREQ,

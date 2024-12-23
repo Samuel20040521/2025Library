@@ -1,5 +1,10 @@
 // compile: g++ -o LEDController.o -I./include -c LEDController.cpp
 #include "../inc/LEDController.h"
+#include <fstream>
+#include <iostream>
+#include <unistd.h> // 用於 usleep
+
+const std::string GPIO_BASE_PATH = "/sys/class/gpio/";
 
 // LEDColor
 LEDColor::LEDColor() : r(0), g(0), b(0), rgb(0) {}
@@ -206,122 +211,26 @@ void LEDController::gpioInit() {
     exit(1);
   }
 }
-void LEDController::select_channel(int channel) {
-  switch (channel) {
-  case 0:
-    if (write(A0, "0", 1) != 1) {
-      perror("Error writing to /sys/class/gpio/gpio23/value");
-      exit(1);
-    }
-    if (write(A1, "0", 1) != 1) {
-      perror("Error writing to /sys/class/gpio/gpio24/value");
-      exit(1);
-    }
-    if (write(A2, "0", 1) != 1) {
-      perror("Error writing to /sys/class/gpio/gpio25/value");
-      exit(1);
-    }
-    break;
-  case 1:
-    if (write(A0, "1", 1) != 1) {
-      perror("Error writing to /sys/class/gpio/gpio23/value");
-      exit(1);
-    }
-    if (write(A1, "0", 1) != 1) {
-      perror("Error writing to /sys/class/gpio/gpio24/value");
-      exit(1);
-    }
-    if (write(A2, "0", 1) != 1) {
-      perror("Error writing to /sys/class/gpio/gpio25/value");
-      exit(1);
-    };
-    break;
-  case 2:
-    if (write(A0, "0", 1) != 1) {
-      perror("Error writing to /sys/class/gpio/gpio23/value");
-      exit(1);
-    }
-    if (write(A1, "1", 1) != 1) {
-      perror("Error writing to /sys/class/gpio/gpio24/value");
-      exit(1);
-    }
-    if (write(A2, "0", 1) != 1) {
-      perror("Error writing to /sys/class/gpio/gpio25/value");
-      exit(1);
-    }
-    break;
-  case 3:
-    if (write(A0, "1", 1) != 1) {
-      perror("Error writing to /sys/class/gpio/gpio23/value");
-      exit(1);
-    }
-    if (write(A1, "1", 1) != 1) {
-      perror("Error writing to /sys/class/gpio/gpio24/value");
-      exit(1);
-    }
-    if (write(A2, "0", 1) != 1) {
-      perror("Error writing to /sys/class/gpio/gpio25/value");
-      exit(1);
-    }
-    break;
-  case 4:
-    if (write(A0, "0", 1) != 1) {
-      perror("Error writing to /sys/class/gpio/gpio23/value");
-      exit(1);
-    }
-    if (write(A1, "0", 1) != 1) {
-      perror("Error writing to /sys/class/gpio/gpio24/value");
-      exit(1);
-    }
-    if (write(A2, "1", 1) != 1) {
-      perror("Error writing to /sys/class/gpio/gpio25/value");
-      exit(1);
-    };
-    break;
-  case 5:
-    if (write(A0, "1", 1) != 1) {
-      perror("Error writing to /sys/class/gpio/gpio23/value");
-      exit(1);
-    }
-    if (write(A1, "0", 1) != 1) {
-      perror("Error writing to /sys/class/gpio/gpio24/value");
-      exit(1);
-    }
-    if (write(A2, "1", 1) != 1) {
-      perror("Error writing to /sys/class/gpio/gpio25/value");
-      exit(1);
-    };
-    break;
-  case 6:
-    if (write(A0, "0", 1) != 1) {
-      perror("Error writing to /sys/class/gpio/gpio23/value");
-      exit(1);
-    }
-    if (write(A1, "1", 1) != 1) {
-      perror("Error writing to /sys/class/gpio/gpio24/value");
-      exit(1);
-    }
-    if (write(A2, "1", 1) != 1) {
-      perror("Error writing to /sys/class/gpio/gpio25/value");
-      exit(1);
-    }
-    break;
-  case 7:
-    if (write(A0, "1", 1) != 1) {
-      perror("Error writing to /sys/class/gpio/gpio23/value");
-      exit(1);
-    }
-    if (write(A1, "1", 1) != 1) {
-      perror("Error writing to /sys/class/gpio/gpio24/value");
-      exit(1);
-    }
-    if (write(A2, "1", 1) != 1) {
-      perror("Error writing to /sys/class/gpio/gpio25/value");
-      exit(1);
-    }
-    break;
+
+void LEDController::select_channel(int address) {
+  if (address > 7 || address < 0) {
+    throw std::invalid_argument("地址超出範圍: 必須在 0 到 7 之間");
   }
+  setValue(A0, address & 0x01);
+  setValue(A1, (address >> 1) & 0x01);
+  setValue(A2, (address >> 2) & 0x01);
 }
+
+void LEDController::setValue(int pin, int value) {
+  std::ofstream valueFile(GPIO_BASE_PATH + "gpio" + std::to_string(pin) +
+                          "/value");
+  if (!valueFile.is_open()) {
+    throw std::runtime_error("無法設置 GPIO " + std::to_string(pin) + " 的值");
+  }
+  valueFile << value;
+  valueFile.close();
+}
+
 void LEDController::finish() {
   for (int i = 0; i < num_channel; i++)
     ws2811_fini(&ledString[i]);
