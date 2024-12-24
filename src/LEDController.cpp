@@ -46,7 +46,7 @@ LEDController::LEDController() { num_channel = 0; }
 int LEDController::init(const std::vector<int> &numLedsEachStrip) {
   close_gpio();
   // initialize WS2812B
-  ws2811_return_t return_WS2811;
+  ws2811_return_t return_WS2811; // an enum for WS2812 status
   num_channel = numLedsEachStrip.size(); // num_channel: number of led strips
   for (int i = 0; i < num_channel; i++) {
     ledString[i].channel[0].count =
