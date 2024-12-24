@@ -39,7 +39,10 @@ int main() {
             for (int i = 0; i < num_strip; i++) {
                 for (int j = 0; j < numLedsEachStrip[i]; j++) {
                     LEDstatus[i][j] = 0xFFFFFF00 + a;
+                    if(i == 4)
+                      LEDstatus[i][j] = 0x20402000 + a;
                 }
+                //Pan try to change Q4
             }
             strip.sendAll(LEDstatus);
             sleep(1/256); //sleep(<total time (sec)> / <range of a>)
@@ -54,8 +57,11 @@ int main() {
             OF.sendAll(status);
             
             for (int i = 0; i < num_strip; i++) {
-                for (int j = 0; j < numLedsEachStrip[i]; j++)
+                for (int j = 0; j < numLedsEachStrip[i]; j++){
                     LEDstatus[i][j] = 0xFFFFFF00 + a;
+                    if(i == 4)
+                      LEDstatus[i][j] = 0x20402000 + a;
+                }
             }
             strip.sendAll(LEDstatus);
             sleep(1/256); //sleep(<total time (sec)> / <range of a>)
