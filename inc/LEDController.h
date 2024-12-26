@@ -28,7 +28,7 @@
 
 // parameters for WS2812
 #define TARGET_FREQ WS2811_TARGET_FREQ
-#define GPIO_PIN 18
+#define GPIO_PIN WS2812_GPIO_PIN
 #define DMA 10
 #define STRIP_TYPE WS2811_STRIP_GRB
 

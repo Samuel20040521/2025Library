@@ -13,7 +13,7 @@ OBJS = $(OBJ_DIR)/AllMain.o $(OBJ_DIR)/LEDController.o $(OBJ_DIR)/OFController.o
 
 # 編譯最終執行檔
 $(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -o $@ $^
 
 # 通用的編譯規則，用於產生 .o 文件
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp

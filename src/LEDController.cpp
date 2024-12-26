@@ -185,13 +185,13 @@ void LEDController::close_gpio() {
 		perror("Unable to open /sys/class/gpio/unexport");
 		exit(1);
 	}
-	if (write(fd, std::to_string(A0_PIN), 2) != 2) {
+	if (write(fd, std::to_string(A0_PIN).c_str(), 2) != 2) {
 		fprintf(stderr, "Error writing to /sys/class/gpio/unexport: %d\n", A0_PIN);
 	}
-	if (write(fd, std::to_string(A1_PIN), 2) != 2) {
+	if (write(fd, std::to_string(A1_PIN).c_str(), 2) != 2) {
 		fprintf(stderr, "Error writing to /sys/class/gpio/unexport: %d\n", A1_PIN);
 	}
-	if (write(fd, std::to_string(A2_PIN), 2) != 2) {
+	if (write(fd, std::to_string(A2_PIN).c_str(), 2) != 2) {
 		fprintf(stderr, "Error writing to /sys/class/gpio/unexport: %d\n", A2_PIN);
 	}
 }
