@@ -8,11 +8,12 @@ using namespace std;
 #include "../inc/OFController.h"
 
 int main() {	
+    const int rainbowColor[7] = {0xFF000000, 0xFF7F0000, 0xFFFF0000, 0x00FF0000, 0x0000FF00, 0x4B008200, 0xEE82EE00};
     //Optical Fiber (OF) setup
     OFController OF;
-    vector<int> status;
+    vector<int> OFstatus;
     OF.init();
-    status.resize(5*Config::NUMPCA);
+    OFstatus.resize(5*Config::NUMPCA);
 
     // LED strip setup
     LEDController strip;
@@ -31,10 +32,10 @@ int main() {
         // brightness increment from 0 to 255
         for (int a = 0; a <= 255; a++) {
             for (int i = 0; i < 5 * Config::NUMPCA; i++) {
-                if (i%2 == 0) status[i] = 0xFFFFFF00 + a; 
-                else status[i] = 0xFFFFFF00 ;
+                if (i%2 == 0) OFstatus[i] = 0xFFFFFF00 + a; 
+                else OFstatus[i] = 0xFFFFFF00 ;
             }
-            OF.sendAll(status);
+            OF.sendAll(OFstatus);
             
             for (int i = 0; i < num_strip; i++) {
                 for (int j = 0; j < numLedsEachStrip[i]; j++) {
@@ -51,10 +52,10 @@ int main() {
         //brightness decrement from 255 to 0
         for (int a = 255; a >= 0; a--) {
             for (int i = 0; i < 5 * Config::NUMPCA; i++) {
-                if (i%2 == 0) status[i] = 0xFFFFFF00 + a; 
-                else status[i] = 0xFFFFFF00 ;
+                if (i%2 == 0) OFstatus[i] = 0xFFFFFF00 + a; 
+                else OFstatus[i] = 0xFFFFFF00 ;
             }
-            OF.sendAll(status);
+            OF.sendAll(OFstatus);
             
             for (int i = 0; i < num_strip; i++) {
                 for (int j = 0; j < numLedsEachStrip[i]; j++){
