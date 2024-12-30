@@ -87,10 +87,6 @@ int LEDController::sendAll(const std::vector<std::vector<int>> &statusLists) {
     }
   }
   // Push data to LED strips
-  play(statusLists);
-  return 0;
-}
-int LEDController::play(const std::vector<std::vector<int>> &statusLists) {
   ws2811_return_t return_WS2811;
   LEDColor led;
   for (int i = 0; i < num_channel; i++) {

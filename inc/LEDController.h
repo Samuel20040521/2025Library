@@ -59,7 +59,6 @@ private:
   int openGPIOValueFile(int pin);
   void setValue(int pin, int value);
   void select_channel(int channel);
-  int play(const std::vector<std::vector<int>> &statusLists);
   int A0_PIN = GPIOPINS[0], A1_PIN = GPIOPINS[1], A2_PIN = GPIOPINS[2];
   int A0_FD, A1_FD, A2_FD;
   static const int LATCH_LED_STRIP_NUM = 8;
