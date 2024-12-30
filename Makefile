@@ -7,8 +7,8 @@ SRC_DIR = src
 TARGET = app
 
 # 列舉所有的 .cpp 和對應的 .o 文件
-SRC_FILES = $(SRC_DIR)/AllMain.cpp $(SRC_DIR)/LEDController.cpp $(SRC_DIR)/OFController.cpp
-OBJS = $(OBJ_DIR)/AllMain.o $(OBJ_DIR)/LEDController.o $(OBJ_DIR)/OFController.o \
+SRC_FILES = $(SRC_DIR)/1230.cpp $(SRC_DIR)/LEDController.cpp $(SRC_DIR)/OFController.cpp
+OBJS = $(OBJ_DIR)/1230.o $(OBJ_DIR)/LEDController.o $(OBJ_DIR)/OFController.o \
        $(OBJ_DIR)/mailbox.o $(OBJ_DIR)/ws2811.o $(OBJ_DIR)/pwm.o $(OBJ_DIR)/pcm.o $(OBJ_DIR)/dma.o $(OBJ_DIR)/rpihw.o
 
 # 編譯最終執行檔

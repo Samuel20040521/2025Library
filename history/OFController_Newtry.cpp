@@ -38,20 +38,17 @@ void OFColor::setColor(const int &colorCode)
     }
 }
 
-int OFColor::getR() { return r; }
-int OFColor::getG() { return g; }
-int OFColor::getB() { return b; }
+int OFColor::getR() const  { return r; }
+int OFColor::getG() const  { return g; }
+int OFColor::getB() const  { return b; }
 
 OFController::OFController() {}
 
 int OFController::init()
 {
-    printf("I2C Hardware Initialzed\n");
-
     // open I2C bus
     for (int i = 0; i < Config::NUMPCA; i++) //the i-th PCA9955 / 0~7(NUMPCA) in total
     {
-        err_flag[i] = true;
         if ((fd[i] = I2CInit()) < 0) 
         {
             fprintf(stderr, "I2C of %d init fail.\n", i);
@@ -60,8 +57,13 @@ int OFController::init()
 
         if (ioctl(fd[i], I2C_SLAVE, Config::PCAAddr[i]) < 0) //no need to mention slave address everytime afterward (PCA9955 Datasheet P.40)
         {
-            fprintf(stderr, "Failed to acquire bus access and/or talk to slave %d", i);
+            fprintf(stderr, "Failed to acquire bus access and/or talk to slave %d.\n", i);
             return 2;
+        }
+        
+        if (write(fd[i], Config::IREFALL_MAX, 2) != 2) //the 2 followed is the byte send
+        {
+            fprintf(stderr, "Failed to set IREF of %d.\n", i);
         }
     }
     return 1;
@@ -69,6 +71,7 @@ int OFController::init()
 
 int OFController::sendAll(const vector<int> &statusLists)
 {    
+    init();
     unsigned char buffer[16];
     buffer[0] = Config::PWM_AUTO_INCREMENT; //no need to mention PWM register address everytime before LED data (PCA9955 Datasheet P.14)
     int counter;
@@ -76,27 +79,18 @@ int OFController::sendAll(const vector<int> &statusLists)
     for (int i = 0; i < Config::NUMPCA; i++)
     {
         counter = 0;
-        I2C_Specified_Init(i);
-        if (err_flag[i]) //if init fail, redo
+        for (int j = 0; j < 5; j++)
         {
-            I2C_Specified_Init(i);
+            Status.setColor(statusLists[i*5+j]); // remember to get every not just the first 5 (5 LED each PCA9955)
+            // fprintf(stderr, "r: %d, g: %d, b:%d\n", Status.getR(), Status.getG(), Status.getB());
+            buffer[counter * 3 + 1] = Status.getR();
+            buffer[counter * 3 + 2] = Status.getG();
+            buffer[counter * 3 + 3] = Status.getB();
+            counter++;
         }
-        if (!err_flag[i])
+        if (write(fd[i], buffer, 16) != 16)
         {
-            for (int j = 0; j < 5; j++)
-            {
-                Status.setColor(statusLists[i*5+j]); // remember to get every not just the first 5 (5 LED each PCA9955)
-                // fprintf(stderr, "r: %d, g: %d, b:%d\n", Status.getR(), Status.getG(), Status.getB());
-                buffer[counter * 3 + 1] = Status.getR();
-                buffer[counter * 3 + 2] = Status.getG();
-                buffer[counter * 3 + 3] = Status.getB();
-                counter++;
-            }
-            if (write(fd[i], buffer, 16) != 16)
-            {
-                // fprintf(stderr, "Failed to write to the I2C bus %x.\n", Config::PCAAddr[i]);
-                err_flag[i] = true;
-            }
+            //fprintf(stderr, "Failed to write to the I2C bus %x.\n", Config::PCAAddr[i]);
         }
     }
     return 1;
@@ -112,20 +106,4 @@ int OFController::I2CInit()
         return -1;
     }
     return fileI2C;
-}
-
-void OFController::I2C_Specified_Init(int i)
-{
-    if (ioctl(fd[i], I2C_SLAVE, Config::PCAAddr[i]) < 0)
-    {
-//        fprintf(stderr, "Failed to acquire bus access and/or talk to slave %d", i);
-    }
-    if (write(fd[i], Config::IREFALL_MAX, 2) != 2) //the 2 followed is the byte send
-    {
-//        fprintf(stderr, "failed to reconnect to I2C bus %x.\n", Config::PCAAddr[i]);
-    }
-    else //if no error
-    {
-        err_flag[i] = false;
-    }
 }

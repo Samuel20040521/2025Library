@@ -76,37 +76,32 @@ int LEDController::init(const std::vector<int> &numLedsEachStrip) {
 }
 
 int LEDController::sendAll(const std::vector<std::vector<int>> &statusLists) {
-	// Check if data size is consistent with stored during initialization
-	for (int i = 0; i < num_channel; i++) {
-		if (int(statusLists[i].size()) > int(ledString[i].channel[0].count)) {
-		//            fprintf(stderr, "Error: Strip %d is longer then init
-		//            settings: %d\n", (int)statusLists[i].size(),
-		//            ledString[i].channel[0].count);
-		return -1;
-		}
-	}
-	// Push data to LED strips
-	play(statusLists);
-	return 0;
-}
-
-int LEDController::play(const std::vector<std::vector<int>> &statusLists) {
-	ws2811_return_t return_WS2811;
-	LEDColor led;
-	for (int i = 0; i < num_channel; i++) {
-		select_channel(i);
-		for (int j = 0; j < ledString[i].channel[0].count; j++) {
-			led.setColor(statusLists[i][j]);
-			ledString[i].channel[0].leds[j] = led.getRGB();
-		}
-		if ((return_WS2811 = ws2811_render(&ledString[i])) != WS2811_SUCCESS) {
-			// fprintf(stderr, "ws2811_render %d failed: %s\n", i,
-			// ws2811_get_return_t_str(return_WS2811));
-			return return_WS2811;
-		}
-		usleep(ledString[i].channel[0].count * 30);
-	}
-	return 0;
+  // Check if data size is consistent with stored during initialization
+  for (int i = 0; i < num_channel; i++) {
+    if (int(statusLists[i].size()) > int(ledString[i].channel[0].count)) {
+      //            fprintf(stderr, "Error: Strip %d is longer then init
+      //            settings: %d\n", (int)statusLists[i].size(),
+      //            ledString[i].channel[0].count);
+      return -1;
+    }
+  }
+  // Push data to LED strips
+  ws2811_return_t return_WS2811;
+  LEDColor led;
+  for (int i = 0; i < num_channel; i++) {
+    select_channel(i);
+    for (int j = 0; j < ledString[i].channel[0].count; j++) {
+      led.setColor(statusLists[i][j]);
+      ledString[i].channel[0].leds[j] = led.getRGB();
+    }
+    if ((return_WS2811 = ws2811_render(&ledString[i])) != WS2811_SUCCESS) {
+      // fprintf(stderr, "ws2811_render %d failed: %s\n", i,
+      // ws2811_get_return_t_str(return_WS2811));
+      return return_WS2811;
+    }
+    usleep(ledString[i].channel[0].count * 30);
+  }
+  return 0;
 }
 
 void LEDController::gpioInit() {

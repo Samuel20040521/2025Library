@@ -52,18 +52,18 @@ public:
     int num_channel;
 
 private:
-    void gpioInit();
-    void exportGPIO(int pin);
-    void close_gpio();
-    void setDirection(int pin, const std::string &direction);
-    int openGPIOValueFile(int pin);
-    void setValue(int pin, int value);
-    void select_channel(int channel);
-    int play(const std::vector<std::vector<int>> &statusLists);
-    int A0_PIN = GPIOPINS[0], A1_PIN = GPIOPINS[1], A2_PIN = GPIOPINS[2]; // 2-digit pin number
-    int A0_FD, A1_FD, A2_FD;
-    static const int LATCH_LED_STRIP_NUM = 8;
-    ws2811_t ledString[LATCH_LED_STRIP_NUM] = { //please stick to this initialization process(in readme of rpi_ws281x)
+  void gpioInit();
+  void exportGPIO(int pin);
+  void close_gpio();
+  void setDirection(int pin, const std::string &direction);
+  int openGPIOValueFile(int pin);
+  void setValue(int pin, int value);
+  void select_channel(int channel);
+  int A0_PIN = GPIOPINS[0], A1_PIN = GPIOPINS[1], A2_PIN = GPIOPINS[2];
+  int A0_FD, A1_FD, A2_FD;
+  static const int LATCH_LED_STRIP_NUM = 8;
+  ws2811_t ledString[LATCH_LED_STRIP_NUM] = { 
+        //please stick to this initialization process(in readme of rpi_ws281x)
         {
             .freq = TARGET_FREQ,
             .dmanum = DMA,

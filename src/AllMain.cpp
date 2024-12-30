@@ -6,7 +6,6 @@ using namespace std;
 
 #include "../inc/LEDController.h"
 #include "../inc/OFController.h"
-
 int main() {	
     const unsigned int rainbowColor[7] = {0xFF000000, 0xFF7F0000, 0xFFFF0000, 0x00FF0000, 0x0000FF00, 0x4B008200, 0xEE82EE00};
     //Optical Fiber (OF) setup
@@ -26,7 +25,6 @@ int main() {
     strip.init(numLedsEachStrip); 
     LEDstatus.resize(num_strip);
     for (int i = 0; i < num_strip; i++) LEDstatus[i].resize(numLedsEachStrip[i]);
-	
     // breathe
     while (true) {
         // brightness increment from 0 to 255

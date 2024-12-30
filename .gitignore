@@ -1,8 +1,10 @@
 # 編譯輸出文件
 /build/
 *.o
+*.a
 *.out
 *.exe
+app
 
 # 編譯器生成文件
 *.log
@@ -20,3 +22,6 @@ cmake_install.cmake
 
 # Tree plugin
 tree.txt
+
+# histroty CMake
+history/Samuel_try/build/
