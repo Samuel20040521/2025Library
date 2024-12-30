@@ -21,9 +21,9 @@ using namespace std;
 class OFColor {
     public:
         OFColor();
-        int getR();
-        int getG();
-        int getB();
+        int getR() const;
+        int getG() const;
+        int getB() const;
         void setColor(const int &colorCode);
     private:
         int r, g, b;

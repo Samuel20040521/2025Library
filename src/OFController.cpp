@@ -38,9 +38,9 @@ void OFColor::setColor(const int &colorCode)
     }
 }
 
-int OFColor::getR() { return r; }
-int OFColor::getG() { return g; }
-int OFColor::getB() { return b; }
+int OFColor::getR() const { return r; }
+int OFColor::getG() const { return g; }
+int OFColor::getB() const { return b; }
 
 OFController::OFController() {}
 
