@@ -11,11 +11,11 @@ TARGET = app
 
 # 手動列舉所有的 .c 和 .cpp 文件
 C_SRC_FILES = Csrc/dma.c Csrc/mailbox.c Csrc/pcm.c Csrc/pwm.c Csrc/rpihw.c Csrc/ws2811.c
-CPP_SRC_FILES = src/LEDController.cpp src/1230.cpp src/OFController.cpp
+CPP_SRC_FILES = src/LEDController.cpp src/NewAllMain.cpp src/OFController.cpp
 
 # 對應的 .o 文件
 C_OBJS = $(OBJ_DIR)/dma.o $(OBJ_DIR)/mailbox.o $(OBJ_DIR)/pcm.o $(OBJ_DIR)/pwm.o $(OBJ_DIR)/rpihw.o $(OBJ_DIR)/ws2811.o
-CPP_OBJS = $(OBJ_DIR)/LEDController.o $(OBJ_DIR)/1230.o $(OBJ_DIR)/OFController.o
+CPP_OBJS = $(OBJ_DIR)/LEDController.o $(OBJ_DIR)/NewAllMain.o $(OBJ_DIR)/OFController.o
 OBJS = $(C_OBJS) $(CPP_OBJS)
 
 # 編譯最終執行檔
