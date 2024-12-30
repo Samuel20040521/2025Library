@@ -1,7 +1,6 @@
 # 編譯輸出文件
 /build/
 *.o
-!obj/*.o
 *.a
 *.out
 *.exe
