@@ -93,6 +93,10 @@ int OFController::sendAll(const vector<int> &statusLists)
             //fprintf(stderr, "Failed to write to the I2C bus %x.\n", Config::PCAAddr[i]);
         }
     }
+    for (int i = 0; i < Config::NUMPCA; i++){
+        if(fd[i]>=0)    
+            close(fd[i]);
+    }
     return 1;
 }
 
