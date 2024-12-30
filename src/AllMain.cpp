@@ -6,7 +6,6 @@ using namespace std;
 
 #include "../inc/LEDController.h"
 #include "../inc/OFController.h"
-
 int main() {	
     //Optical Fiber (OF) setup
     OFController OF;
@@ -25,7 +24,6 @@ int main() {
     strip.init(numLedsEachStrip); 
     LEDstatus.resize(num_strip);
     for (int i = 0; i < num_strip; i++) LEDstatus[i].resize(numLedsEachStrip[i]);
-	
     // breathe
     while (true) {
         // brightness increment from 0 to 255
