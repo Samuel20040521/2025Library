@@ -28,28 +28,28 @@
 
 // parameters for WS2812
 #define TARGET_FREQ WS2811_TARGET_FREQ
-#define GPIO_PIN 18
+#define GPIO_PIN WS2812_GPIO_PIN
 #define DMA 10
 #define STRIP_TYPE WS2811_STRIP_GRB
 
 class LEDColor {
 public:
-  LEDColor();
-  void setColor(const int &colorCode);
-  uint32_t getRGB();
+    LEDColor();
+    void setColor(const int &colorCode);
+    uint32_t getRGB();
 
 private:
-  int r, g, b;
-  uint32_t rgb;
+    int r, g, b;
+    uint32_t rgb;
 };
 
 class LEDController {
 public:
-  LEDController();
-  int init(const std::vector<int> &shape);
-  int sendAll(const std::vector<std::vector<int>> &statusLists);
-  void finish();
-  int num_channel;
+    LEDController();
+    int init(const std::vector<int> &shape);
+    int sendAll(const std::vector<std::vector<int>> &statusLists);
+    void finish();
+    int num_channel;
 
 private:
   void gpioInit();
@@ -62,7 +62,8 @@ private:
   int A0_PIN = GPIOPINS[0], A1_PIN = GPIOPINS[1], A2_PIN = GPIOPINS[2];
   int A0_FD, A1_FD, A2_FD;
   static const int LATCH_LED_STRIP_NUM = 8;
-  ws2811_t ledString[LATCH_LED_STRIP_NUM] = { //please stick to this initialization process(in readme of rpi_ws281x)
+  ws2811_t ledString[LATCH_LED_STRIP_NUM] = { 
+        //please stick to this initialization process(in readme of rpi_ws281x)
         {
             .freq = TARGET_FREQ,
             .dmanum = DMA,

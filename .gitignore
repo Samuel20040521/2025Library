@@ -4,6 +4,7 @@
 *.a
 *.out
 *.exe
+app
 
 # 編譯器生成文件
 *.log
