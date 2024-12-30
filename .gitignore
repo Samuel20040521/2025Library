@@ -22,3 +22,6 @@ cmake_install.cmake
 
 # Tree plugin
 tree.txt
+
+# histroty CMake
+history/Samuel_try/build/
