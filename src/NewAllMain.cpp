@@ -27,11 +27,25 @@ int main() {
     for (int i = 0; i < num_strip; i++) LEDstatus[i].resize(numLedsEachStrip[i]);
 
 
-    cout << "MODE?? (0:off; 1:rainbow)"<<endl;
-    bool mode;
+    cout << "MODE?? (0:off; 1:rainbow; 2:white, half bright)"<<endl;
+    int mode;
     cin>>mode;
     // breathe
-    if(!mode){
+    if(mode==2) {
+        while(true) {
+          for(int i = 0; i < 5 * Config::NUMPCA; i++){
+            status[i] = 0xFFFFFFA0;
+          }
+          OF.sendAll(status);
+          for(int i = 0; i < num_strip; i++) {
+            for (int j = 0; j < numLedsEachStrip[i]; j++) {
+              LEDstatus[i][j] = 0xFFFFFF00;
+            }
+          }
+          strip.sendAll(LEDstatus);
+        }
+    }
+    else if(mode==0){
         for(int i = 0; i < 5 * Config::NUMPCA; i++){
             status[i] = 0x00000000;
         }
@@ -41,6 +55,7 @@ int main() {
                 LEDstatus[i][j] = 0x00000000;
             }
         }
+        strip.sendAll(LEDstatus);
     }
     else{
         unsigned int rainbowColor[7] = {0xFF000000, 0xFF7F0000, 0xFFFF0000, 0x00FF0000, 0x0000FF00, 0x4B008200, 0xEE82EE00};
