@@ -2,8 +2,8 @@
 #define CONFIG_H
 
 namespace Config {
-inline constexpr int NUMPCA = 1; // number of PCA
-inline constexpr int PCAAddr[] = {0X23}; // PCA addresses
+inline constexpr int NUMPCA = 2; // number of PCA
+inline constexpr int PCAAddr[] = {0x23, 0x5E}; // PCA addresses
 
 // using which WS2812 GPIO_PIN
 #define WS2812_GPIO_PIN 18

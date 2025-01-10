@@ -30,7 +30,7 @@ int main() {
     cout << "MODE?? (0:off; 1:rainbow; 2:white, half bright)"<<endl;
     int mode;
     cin>>mode;
-    // breathe
+    // always white
     if(mode==2) {
         while(true) {
           for(int i = 0; i < 5 * Config::NUMPCA; i++){
@@ -45,6 +45,7 @@ int main() {
           strip.sendAll(LEDstatus);
         }
     }
+    // off
     else if(mode==0){
         for(int i = 0; i < 5 * Config::NUMPCA; i++){
             status[i] = 0x00000000;
@@ -57,6 +58,7 @@ int main() {
         }
         strip.sendAll(LEDstatus);
     }
+    // rainbow
     else{
         unsigned int rainbowColor[7] = {0xFF000000, 0xFF7F0000, 0xFFFF0000, 0x00FF0000, 0x0000FF00, 0x4B008200, 0xEE82EE00};
         int color_no = 0;
