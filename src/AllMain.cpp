@@ -12,7 +12,7 @@ int main() {
     OFController OF;
     vector<int> OFstatus;
     OF.init();
-    OFstatus.resize(5*Config::NUMPCA);
+    OFstatus.resize(5*Config::NUMPCA); // 5 LED bulbs per PCA9685
 
     // LED strip setup
     LEDController strip;
