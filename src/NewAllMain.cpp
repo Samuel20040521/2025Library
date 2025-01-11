@@ -1,4 +1,5 @@
 // compile: g++ AllMain.cpp LEDController.o OFController.o -lws2811 -o test
+// Mode choose: 0: Off, 1: Rainbow, 2: Half bright white
 #include <iostream>
 #include <cstdint>
 #include <vector>
@@ -73,7 +74,6 @@ int main() {
                     for (int j = 0; j < numLedsEachStrip[i]; j++) {
                         LEDstatus[i][j] = rainbowColor[color_no] + a;
                     }
-                    //Pan try to change Q4
                 }
                 strip.sendAll(LEDstatus);
                 sleep(1/256); //sleep(<total time (sec)> / <range of a>)

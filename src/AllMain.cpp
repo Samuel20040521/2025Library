@@ -1,4 +1,5 @@
 // compile: g++ AllMain.cpp LEDController.o OFController.o -lws2811 -o test
+// Rainbow Breathing Light
 #include <iostream>
 #include <cstdint>
 #include <vector>
