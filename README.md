@@ -1,5 +1,9 @@
 # Prerequest
 1. A RPI
+- 下載[Raspberry Pi Imager](https://www.raspberrypi.com/software/)，並且將sd卡插入電腦(用usb轉接頭)
+- 打開 Raspberry Pi Imager 並且將設置選成這樣(Other —> OS (Legacy, 32-bit) LITE)
+- 詳細設置待補
+
 2. Enable I2C in RPI
 ``` bash
 sudo raspi-config
@@ -37,7 +41,8 @@ git clone git@github.com:Samuel20040521/2025Library.git
 ```bash
 make
 ```
-2. 接腳(待補)
+2. 接腳
+![Pin overview diagram]
 
 3. 執行
 ```bash

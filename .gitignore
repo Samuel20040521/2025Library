@@ -25,3 +25,6 @@ tree.txt
 
 # histroty CMake
 history/Samuel_try/build/
+
+# macOS打開文件的配置檔
+.DS_Store
