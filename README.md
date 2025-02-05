@@ -1,6 +1,6 @@
 # Prerequest
-1. A RPI
-- 下載[Raspberry Pi Imager](https://www.raspberrypi.com/software/)，並且將sd卡插入電腦(用usb轉接頭)
+1. RPI*!
+- 下載 [Raspberry Pi Imager](https://www.raspberrypi.com/software/)，並且將sd卡插入電腦(用usb轉接頭)
 - 打開 Raspberry Pi Imager 並且將設置選成這樣(Other —> OS (Legacy, 32-bit) LITE)
 - 詳細設置待補
 
