@@ -42,7 +42,7 @@ git clone git@github.com:Samuel20040521/2025Library.git
 make
 ```
 2. 接腳
-![Pin overview diagram]
+![Image text](https://github.com/Samuel20040521/2025Library/blob/main/doc/Pin%20overview%20diagram.png)
 
 3. 執行
 ```bash
