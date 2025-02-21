@@ -8,7 +8,14 @@ using namespace std;
 #include "../inc/LEDController.h"
 #include "../inc/OFController.h"
 
-int main() {	
+int main(int argc, char* argv[]) {	
+    if (argc != 2) {  // parameter check
+        cerr << "Usage: " << argv[0] << " <mode_number>" << endl;
+        return 1;
+    }
+    
+    int mode = atoi(argv[1]);
+
     const unsigned int rainbowColor[7] = {0xFF000000, 0xFF7F0000, 0xFFFF0000, 0x00FF0000, 0x0000FF00, 0x4B008200, 0xEE82EE00};
     //Optical Fiber (OF) setup
     OFController OF;
@@ -29,9 +36,7 @@ int main() {
     for (int i = 0; i < num_strip; i++) LEDstatus[i].resize(numLedsEachStrip[i]);
 
 
-    cout << "MODE?? (0:Off; 1:Rainbow; 2:Half bright white)" << endl;
-    int mode;
-    cin >> mode;
+    cout << "MODE (0:Off; 1:Rainbow; 2:Half bright white)" << endl;
     // always white
     if(mode == 2) {
         while(true) {
