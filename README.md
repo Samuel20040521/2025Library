@@ -1,8 +1,9 @@
 # Prerequest
 1. A RPI
 - 下載[Raspberry Pi Imager](https://www.raspberrypi.com/software/)，並且將sd卡插入電腦(用usb轉接頭)
-- 打開 Raspberry Pi Imager 並且將設置選成這樣(Other —> OS (Legacy, 32-bit) LITE)
-- 詳細設置待補
+- 打開 Raspberry Pi Imager 並且將設置選成`Other —> OS (Legacy, 32-bit) LITE`
+- 詳細設置
+
 
 2. Enable I2C in RPI
 ``` bash
@@ -19,6 +20,7 @@ sudo apt-get install git vim cmake i2c-tools
 4. Install ws2811 library
 ``` bash
 git clone https://github.com/jgarff/rpi_ws281x.git
+cd rpi_ws281x
 mkdir build
 cd build
 cmake -D BUILD_SHARED=OFF -D BUILD_TEST=ON ..
@@ -32,9 +34,11 @@ To install built binaries and headers into your system type:
 sudo make install
 ```
 
-5. git clone 2025library 
+5. git clone 2025library
 ```bash
-git clone git@github.com:Samuel20040521/2025Library.git
+cd
+git clone https://github.com/Samuel20040521/2025Library.git
+cd 2025Library
 ```
 # How to use
 1. build code
